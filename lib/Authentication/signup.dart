@@ -13,6 +13,7 @@ class _State extends State<SignUp> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController checkpasswordController = TextEditingController();
   TextEditingController mobilenumberController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,7 +93,6 @@ class _State extends State<SignUp> {
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                   child: TextField(
                     keyboardType: TextInputType.number,
-
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Gender',
@@ -113,7 +113,7 @@ class _State extends State<SignUp> {
                 Container(
                     child: Row(
                       children: <Widget>[
-                        Text('Does you have account?'),
+                        Text('Do you have account?'),
                         FlatButton(
                           textColor: Colors.blue,
                           child: Text(

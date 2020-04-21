@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:ichef/Authentication/forgetpassword.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -9,6 +11,25 @@ class Login extends StatefulWidget {
 class _State extends State<Login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  void firebaseLogin() async {
+    try {
+      AuthResult auth = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text);
+
+      if (auth.user != null)
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (cont) {
+              return ForgetPassword();
+            },
+          ),
+        );
+    } catch (error) {
+      print("Erorr in login function");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +89,8 @@ class _State extends State<Login> {
                       color: Colors.blue,
                       child: Text('Login'),
                       onPressed: () {
+//                        print("Here");
+                        firebaseLogin();
                         print(emailController.text);
                         print(passwordController.text);
                       },
@@ -96,7 +119,6 @@ class _State extends State<Login> {
                     child: SignInButton(Buttons.Facebook,
                         padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                         onPressed: () {})),
-
                 Container(
                   height: 50,
                   padding: EdgeInsets.fromLTRB(10, 0, 10, 0),

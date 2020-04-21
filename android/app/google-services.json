@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "807103331923",
+    "firebase_url": "https://ichef-d95e4.firebaseio.com",
+    "project_id": "ichef-d95e4",
+    "storage_bucket": "ichef-d95e4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:807103331923:android:a6c395de150e933bc5d0a6",
+        "android_client_info": {
+          "package_name": "com.example.ichef"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "807103331923-dgcd7vsvaopaa50btk4h0slp3j0q4itc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8HQF-VUc5FwKvtZNgYjC1TCO6i0J5tng"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "807103331923-dgcd7vsvaopaa50btk4h0slp3j0q4itc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
