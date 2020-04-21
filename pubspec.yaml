@@ -14,13 +14,15 @@ description: IChef recipe app
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_signin_button: ^1.0.0
   firebase_auth: ^0.16.0
+  cloud_firestore: any # add this line
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

@@ -1,7 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
-
 
 class SignUp extends StatefulWidget {
   @override
@@ -82,7 +82,6 @@ class _State extends State<SignUp> {
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: TextField(
                     keyboardType: TextInputType.number,
-
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Date of birth',
@@ -108,7 +107,16 @@ class _State extends State<SignUp> {
                       textColor: Colors.white,
                       color: Colors.blue,
                       child: Text('Sign up'),
-                      onPressed: () {
+
+                      onPressed: (){
+//                        print("SignUp");
+//                         final document = Firestore.instance
+//                            .collection('users')
+//                            .document('hashem@test.com');
+//                        await  document.get().then<dynamic>(( DocumentSnapshot snapshot) async{
+//                          print(snapshot.data['age']);
+//                        });
+
                       },
                     )),
                 Container(
@@ -128,7 +136,6 @@ class _State extends State<SignUp> {
                       ],
                       mainAxisAlignment: MainAxisAlignment.center,
                     )),
-
               ],
             )));
   }
