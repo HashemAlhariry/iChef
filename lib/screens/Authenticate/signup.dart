@@ -9,10 +9,13 @@ class SignUp extends StatefulWidget {
 }
 
 class _State extends State<SignUp> {
+
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController checkpasswordController = TextEditingController();
   TextEditingController mobilenumberController = TextEditingController();
+  bool _isLoading;
+
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +119,6 @@ class _State extends State<SignUp> {
 //                        await  document.get().then<dynamic>(( DocumentSnapshot snapshot) async{
 //                          print(snapshot.data['age']);
 //                        });
-
                       },
                     )),
                 Container(

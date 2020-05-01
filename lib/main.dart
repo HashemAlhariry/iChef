@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
-import './Authentication/forgetpassword.dart';
-import './Authentication/login.dart';
-import './Authentication/signup.dart';
+import 'package:ichef/screens/Authenticate/authenticate.dart';
+import 'package:ichef/screens/Authenticate/login.dart';
 
-void main() {
-  runApp(MaterialApp(
-    home:SignUp(),
-  ));
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Authenticate()
+    );
+  }
 }
-
-
-
-
-
-
-
-
-
-
-

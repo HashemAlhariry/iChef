@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:ichef/Authentication/forgetpassword.dart';
+import 'package:ichef/services/auth.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -12,6 +12,10 @@ class _State extends State<Login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+
+  final AuthService _auth = AuthService();
+
+ /*
   void firebaseLogin() async {
     try {
       AuthResult auth = await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -31,6 +35,8 @@ class _State extends State<Login> {
     }
   }
 
+  */
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,8 +44,8 @@ class _State extends State<Login> {
           title: Text('Login'),
           backgroundColor: Colors.red,
         ),
-        body: Padding(
-            padding: EdgeInsets.all(10),
+        body: Container(
+            padding: EdgeInsets.symmetric(vertical: 20.0,horizontal: 20.0),
             child: ListView(
               children: <Widget>[
                 Container(
@@ -53,26 +59,49 @@ class _State extends State<Login> {
                           fontSize: 40),
                     )),
                 Container(
-                  padding: EdgeInsets.all(10),
-                  child: TextField(
-                    controller: emailController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Email',
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: TextField(
-                    obscureText: true,
-                    controller: passwordController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Password',
-                    ),
-                  ),
-                ),
+                  child:Form(
+                    child: Column(
+                       children: <Widget>[
+                          Container(
+                             padding: EdgeInsets.all(10),
+                             child: TextField(
+                              controller: emailController,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Email',
+                              ),
+                            ),
+                          ),
+
+                         Container(
+                           padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                           child: TextField(
+                             obscureText: true,
+                             controller: passwordController,
+                             decoration: InputDecoration(
+                               border: OutlineInputBorder(),
+                               labelText: 'Password',
+                             ),
+                           ),
+                         ),
+                         Container(
+                             height: 50,
+                             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                             margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                             child: RaisedButton(
+                               textColor: Colors.white,
+                               color: Colors.blue,
+                               child: Text('Login'),
+                               onPressed: () {
+                                 // print("Here");
+                                 //firebaseLogin();
+                                 print(emailController.text);
+                                 print(passwordController.text);
+                               },
+                             )),
+
+                       ],
+                    ))),
                 FlatButton(
                   onPressed: () {
                     //forgot password screen
@@ -81,18 +110,24 @@ class _State extends State<Login> {
                   child: Text('Forgot Password'),
                 ),
                 Container(
-                    height: 50,
+                    height: 40,
                     padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
                     child: RaisedButton(
                       textColor: Colors.white,
                       color: Colors.blue,
-                      child: Text('Login'),
-                      onPressed: () {
-//                        print("Here");
-                        firebaseLogin();
-                        print(emailController.text);
-                        print(passwordController.text);
+                      child: Text('Sign in Anonymous'),
+                      onPressed: () async {
+                       dynamic result = await _auth.signInAnon();
+                       if(result==null)
+                         {
+                           print('Error Signing in');
+                         }
+                       else{
+                         print('Signed in ');
+                         print(result.uid);
+
+                       }
                       },
                     )),
                 Container(
