@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:ichef/services/auth.dart';
+import 'package:ichef/shared/constants.dart';
+import 'package:ichef/shared/loading.dart';
 
 class SignUp extends StatefulWidget {
   final Function toggleView;
-
   SignUp({this.toggleView});
 
   @override
@@ -19,14 +21,17 @@ class _State extends State<SignUp> {
   String password = '';
   String retryPassword = '';
   String mobile = '';
+  String address = '';
+  String age= '';
   String error= '';
 
   final AuthService _authService= AuthService();
   final _formkey = GlobalKey <FormState>();
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading? Loading() : Scaffold(
         appBar: AppBar(
           title: Text('Sign Up'),
           backgroundColor: Colors.red[400],
@@ -53,13 +58,8 @@ class _State extends State<SignUp> {
                           children: <Widget>[
                             SizedBox(height: 20.0),
                             TextFormField(
-                              decoration: InputDecoration(
-                                  hintText: "Email"
-                              ),
-                              validator: (val) =>
-                              val.isEmpty
-                                  ? 'Enter an email'
-                                  : null,
+                              decoration: textInputDecoration.copyWith(hintText: "Email"),
+                              validator: (val) => val.isEmpty ? 'Enter an email' : null,
                               onChanged: (val) {
                                 setState(() => email = val);
                               },
@@ -67,9 +67,7 @@ class _State extends State<SignUp> {
                             SizedBox(height: 20.0),
                             TextFormField(
                               validator: (val) => val.length < 6 ? 'Enter a password more than 6 characters' : null,
-                              decoration: InputDecoration(
-                                  hintText: "Password"
-                              ),
+                              decoration:textInputDecoration.copyWith(hintText: "Password"),
                               obscureText: true,
                               onChanged: (val) {
                                 setState(() => password = val);
@@ -89,9 +87,7 @@ class _State extends State<SignUp> {
                                 }
                                 return 'Enter a password more than 6 characters';
                               },
-                              decoration: InputDecoration(
-                                  hintText: "Retry Password"
-                              ),
+                              decoration:textInputDecoration.copyWith(hintText: "Retry password"),
                               obscureText: true,
                               onChanged: (val) {
                                 setState(() => retryPassword = val);
@@ -100,25 +96,48 @@ class _State extends State<SignUp> {
                             SizedBox(height: 20.0),
                             TextFormField(
                               validator: (val) => val.length == 11  ?  null : 'Enter your mobile number',
-                              decoration: InputDecoration(
-                                  hintText: "Mobile number"
-                              ),
+                              decoration: textInputDecoration.copyWith(hintText: "Mobile number"),
                               keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                WhitelistingTextInputFormatter.digitsOnly
+                              ],
                               onChanged: (val) {
                                 setState(() => mobile = val);
                               },
                             ),
                             SizedBox(height: 20.0),
+                            TextFormField(
+                              validator: (val) => int.parse(val)> 5 && int.parse(val) < 125   ?  null : 'Enter your age right',
+                              decoration: textInputDecoration.copyWith(hintText: "age"),
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                WhitelistingTextInputFormatter.digitsOnly
+                              ],
+                              onChanged: (val) {
+                                setState(() => age = val);
+                              },
+                            ),
+                            SizedBox(height: 20.0),
+                            TextFormField(
+                              decoration: textInputDecoration.copyWith(hintText: "Address"),
+                              onChanged: (val) {
+                                setState(() => address = val);
+                              },
+                            ),
+                            SizedBox(height: 20.0),
+
                             RaisedButton(
                               textColor: Colors.white,
                               color: Colors.blue,
                               child: Text('Sign up'),
                               onPressed: () async {
                                 if (_formkey.currentState.validate()) {
-                                  dynamic result = await _authService.signUpWithEmailAndPassword(email, password);
+                                  setState(() => loading=true);
+                                  dynamic result = await _authService.signUpWithEmailAndPassword(email, password,mobile,age,address);
                                   if(result==null){
                                         setState(() {
-                                          error='Please enter valid email ';
+                                          loading=false;
+                                          error='Please enter valid email';
                                         });
                                   }
                                 }

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:ichef/services/auth.dart';
-
+import 'package:ichef/models/user.dart';
 class Home extends StatelessWidget {
 
   final AuthService _auth= AuthService();
 
-
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Welcome Home"),

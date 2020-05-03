@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:ichef/services/auth.dart';
+import 'package:ichef/shared/constants.dart';
+import 'package:ichef/shared/loading.dart';
 
 class Login extends StatefulWidget {
 
@@ -15,36 +17,16 @@ class _State extends State<Login> {
 
   final AuthService _authService = AuthService();
   final _formkey = GlobalKey<FormState>();
+  bool loading=false;
 
   String error ='';
   String email = '';
   String password = '';
 
- /*
-  void firebaseLogin() async {
-    try {
-      AuthResult auth = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text, password: passwordController.text);
-
-      if (auth.user != null)
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (cont) {
-              return ForgetPassword();
-            },
-          ),
-        );
-    } catch (error) {
-      print("Erorr in login function");
-    }
-  }
-
-  */
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
         appBar: AppBar(
           title: Text('Login'),
           backgroundColor: Colors.red[400],
@@ -70,9 +52,7 @@ class _State extends State<Login> {
                        children: <Widget>[
                          SizedBox(height: 20.0),
                          TextFormField(
-                           decoration: InputDecoration(
-                               hintText: "Email"
-                           ),
+                           decoration: textInputDecoration.copyWith(hintText: "Email"),
                            validator: (val) => val.isEmpty ? 'Enter an email' : null,
                            onChanged: (val) {
                              setState(() => email = val);
@@ -82,9 +62,7 @@ class _State extends State<Login> {
                          TextFormField(
                            validator: (val) => val.length < 6 ? 'Enter a password more than 6 characters' : null,
                            obscureText: true,
-                           decoration: InputDecoration(
-                               hintText: "Password"
-                           ),
+                           decoration:textInputDecoration.copyWith(hintText: "Password"),
                            onChanged: (val) {
                              setState(() => password = val );
                            },
@@ -96,11 +74,13 @@ class _State extends State<Login> {
                            child: Text('Login'),
                            onPressed: () async {
                              if (_formkey.currentState.validate()) {
+                               setState(() => loading=true);
                                email=email.trim();
                                dynamic result = await _authService.logInWithEmailAndPassword(email, password);
                                print(email+ " " + password);
                                if(result==null){
                                 setState(() {
+                                  loading=false;
                                   error='Couldn\'t Sign in with email or password';
                                  });
                                 }
