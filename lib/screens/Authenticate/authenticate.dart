@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ichef/screens/Authenticate/login.dart';
+import 'package:ichef/screens/Authenticate/signup.dart';
 
 class Authenticate extends StatefulWidget {
   @override
@@ -7,10 +8,21 @@ class Authenticate extends StatefulWidget {
 }
 
 class _AuthenticateState extends State<Authenticate> {
+
+  bool showForms=true;
+  void toggleView(){
+    setState(() => showForms = !showForms);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Login(),
-    );
+   if(showForms)
+     {
+       return Login(toggleView:toggleView);
+     }
+   else
+     {
+       return SignUp(toggleView:toggleView);
+     }
   }
 }

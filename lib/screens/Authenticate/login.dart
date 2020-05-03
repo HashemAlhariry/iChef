@@ -4,16 +4,21 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:ichef/services/auth.dart';
 
 class Login extends StatefulWidget {
+
+  final Function toggleView;
+  Login({this.toggleView});
   @override
   _State createState() => _State();
 }
 
 class _State extends State<Login> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
 
+  final AuthService _authService = AuthService();
+  final _formkey = GlobalKey<FormState>();
 
-  final AuthService _auth = AuthService();
+  String error ='';
+  String email = '';
+  String password = '';
 
  /*
   void firebaseLogin() async {
@@ -42,10 +47,10 @@ class _State extends State<Login> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Login'),
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.red[400],
         ),
         body: Container(
-            padding: EdgeInsets.symmetric(vertical: 20.0,horizontal: 20.0),
+            padding: EdgeInsets.symmetric(horizontal:20.0),
             child: ListView(
               children: <Widget>[
                 Container(
@@ -60,48 +65,53 @@ class _State extends State<Login> {
                     )),
                 Container(
                   child:Form(
+                    key: _formkey,
                     child: Column(
                        children: <Widget>[
-                          Container(
-                             padding: EdgeInsets.all(10),
-                             child: TextField(
-                              controller: emailController,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'Email',
-                              ),
-                            ),
-                          ),
-
-                         Container(
-                           padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                           child: TextField(
-                             obscureText: true,
-                             controller: passwordController,
-                             decoration: InputDecoration(
-                               border: OutlineInputBorder(),
-                               labelText: 'Password',
-                             ),
+                         SizedBox(height: 20.0),
+                         TextFormField(
+                           decoration: InputDecoration(
+                               hintText: "Email"
                            ),
+                           validator: (val) => val.isEmpty ? 'Enter an email' : null,
+                           onChanged: (val) {
+                             setState(() => email = val);
+                           },
                          ),
-                         Container(
-                             height: 50,
-                             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                             margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                             child: RaisedButton(
-                               textColor: Colors.white,
-                               color: Colors.blue,
-                               child: Text('Login'),
-                               onPressed: () {
-                                 // print("Here");
-                                 //firebaseLogin();
-                                 print(emailController.text);
-                                 print(passwordController.text);
-                               },
-                             )),
-
+                         SizedBox(height: 20.0),
+                         TextFormField(
+                           validator: (val) => val.length < 6 ? 'Enter a password more than 6 characters' : null,
+                           obscureText: true,
+                           decoration: InputDecoration(
+                               hintText: "Password"
+                           ),
+                           onChanged: (val) {
+                             setState(() => password = val );
+                           },
+                         ),
+                         SizedBox(height: 20.0),
+                         RaisedButton(
+                           textColor: Colors.white,
+                           color: Colors.blue,
+                           child: Text('Login'),
+                           onPressed: () async {
+                             if (_formkey.currentState.validate()) {
+                               email=email.trim();
+                               dynamic result = await _authService.logInWithEmailAndPassword(email, password);
+                               print(email+ " " + password);
+                               if(result==null){
+                                setState(() {
+                                  error='Couldn\'t Sign in with email or password';
+                                 });
+                                }
+                             }
+                           },
+                         ),
+                         SizedBox(height: 15.0,),
+                         Text(error,style: TextStyle(color:Colors.red,fontSize: 14.0,),textAlign: TextAlign.center,),
                        ],
                     ))),
+
                 FlatButton(
                   onPressed: () {
                     //forgot password screen
@@ -118,7 +128,7 @@ class _State extends State<Login> {
                       color: Colors.blue,
                       child: Text('Sign in Anonymous'),
                       onPressed: () async {
-                       dynamic result = await _auth.signInAnon();
+                       dynamic result = await _authService.signInAnon();
                        if(result==null)
                          {
                            print('Error Signing in');
@@ -126,42 +136,30 @@ class _State extends State<Login> {
                        else{
                          print('Signed in ');
                          print(result.uid);
-
                        }
                       },
                     )),
+
+                SizedBox(height: 10.0),
                 Container(
                     child: Row(
-                  children: <Widget>[
-                    Text('Does not have account?'),
-                    FlatButton(
-                      textColor: Colors.blue,
-                      child: Text(
-                        'Sign Up',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      onPressed: () {
-                        //signup screen
-                      },
-                    )
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.center,
-                )),
-                Container(
-                    height: 50,
-                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
-                    child: SignInButton(Buttons.Facebook,
-                        padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                        onPressed: () {})),
-                Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
-                  child: SignInButton(Buttons.GoogleDark,
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                      onPressed: () {}),
-                ),
+                      children: <Widget>[
+                        Text('Doesn\'t you have account'),
+                        FlatButton.icon(
+                          icon:Icon(Icons.person),
+                          textColor: Colors.blue,
+                          label: Text(
+                            'Sign Up',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          onPressed: () {
+                            widget.toggleView();
+                          },
+                        )
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.center,
+                    )),
+
               ],
             )));
   }
