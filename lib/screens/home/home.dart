@@ -1,6 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:ichef/screens/home/recipeslist.dart';
 import 'package:ichef/services/auth.dart';
 import 'package:ichef/models/user.dart';
+import 'package:ichef/services/database.dart';
+import 'package:provider/provider.dart';
+import 'package:ichef/models/recipe.dart';
+
 class Home extends StatelessWidget {
 
   final AuthService _auth= AuthService();
@@ -9,18 +15,22 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
 
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Welcome Home"),
-        backgroundColor: Colors.red[400],
-        elevation: 0.0,
-        actions: <Widget>[
-          FlatButton.icon(
-              icon: Icon(Icons.person), label: Text('Logout'),
-              onPressed: () async {
-              await _auth.signOut();
-              })
-        ],
+    return StreamProvider<QuerySnapshot>.value(
+      value: DatabaseService().recipes,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("iChef"),
+          backgroundColor: Colors.red[400],
+          elevation: 0.0,
+          actions: <Widget>[
+            FlatButton.icon(
+                icon: Icon(Icons.person), label: Text('Logout'),
+                onPressed: () async {
+                await _auth.signOut();
+                })
+          ],
+        ),
+        body: RecipesList(),
       ),
     );
   }
