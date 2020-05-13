@@ -9,6 +9,7 @@ import 'package:ichef/models/recipe.dart';
 
 class Home extends StatelessWidget {
 
+
   final AuthService _auth= AuthService();
 
   @override
@@ -19,8 +20,8 @@ class Home extends StatelessWidget {
       value: DatabaseService().recipes,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("iChef"),
-          backgroundColor: Colors.red[400],
+          title: Text("iChef" ,style: TextStyle(color: Colors.red[400]),),
+          backgroundColor: Colors.white,
           elevation: 0.0,
           actions: <Widget>[
             FlatButton.icon(

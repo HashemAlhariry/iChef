@@ -1,4 +1,5 @@
 class Recipe {
+  String name;
   String cuisine;
   String description;
   int duration;
@@ -8,7 +9,8 @@ class Recipe {
   List<Ingredients> ingredients;
   List<Steps> steps;
 
-  Recipe(this.cuisine, this.description, this.duration, this.image,
+
+  Recipe(this.name,this.cuisine, this.description, this.duration, this.image,
       this.numberOfServings, this.price, this.ingredients, this.steps);
 }
 
