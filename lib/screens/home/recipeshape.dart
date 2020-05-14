@@ -17,9 +17,9 @@ class RecipeShape extends StatelessWidget {
           ),
           child: Container(
             width: 150,
+            height:100,
             child: Container(
              child:  Text(recipe.name ,style: TextStyle(fontSize: 16.0),),
-
             ),
           )),
     );

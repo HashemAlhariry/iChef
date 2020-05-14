@@ -15,7 +15,6 @@ class _RecipesListState extends State<RecipesList> {
   Widget build(BuildContext context) {
 
     final List<Recipe> recipes = new List<Recipe>();
-
     final allRecipes = Provider.of<QuerySnapshot>(context);
     //print(allRecipes.documents);
 
@@ -45,10 +44,8 @@ class _RecipesListState extends State<RecipesList> {
           doc.data['price'],
           ingredients,
           steps);
-
       //add each recipe in recipesList
       recipes.add(recipe);
-
     }
 
     return ListView.builder(
