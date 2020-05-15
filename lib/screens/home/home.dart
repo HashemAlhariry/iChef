@@ -13,6 +13,8 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
     return StreamProvider<QuerySnapshot>.value(
       value: DatabaseService().recipes,
       child: Scaffold(
@@ -37,7 +39,7 @@ class Home extends StatelessWidget {
           child: new ListView(
             children: <Widget>[
               new UserAccountsDrawerHeader(
-                accountName: Text("USERNAME  "),
+                accountName: Text("USERNAME "),
                 accountEmail: Text("EMAIL ACOUNT"),
                 currentAccountPicture: GestureDetector(
                   child: new CircleAvatar(
@@ -69,7 +71,7 @@ class Home extends StatelessWidget {
                   await _auth.signOut();
                 },
                 child: ListTile(
-                    title: Text('Log out'), leading: Icon(Icons.person,color: Colors.red )),
+                    title: Text('Log out'), leading: Icon(Icons.person,color: Colors.grey )),
               ),
               InkWell(
                 onTap: () {},
@@ -83,13 +85,10 @@ class Home extends StatelessWidget {
           child: new Column(
           children: <Widget>[
             new Flexible(child: RecipesList()),
-            new Flexible(child: RecipesList()),
+
           ],
 
         )
-
-
-
         ),
       ),
     );

@@ -49,7 +49,6 @@ class _RecipesListState extends State<RecipesList> {
     }
 
     return ListView.builder(
-      scrollDirection: Axis.horizontal,
       itemCount:recipes.length,
       itemBuilder: (context,index) {
         return RecipeShape(recipe: recipes[index]);
