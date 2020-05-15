@@ -22,6 +22,7 @@ class _RecipeShapeState extends State<RecipeShape> {
     });
 
 
+
   }
 
   @override
@@ -50,6 +51,12 @@ class _RecipeShapeState extends State<RecipeShape> {
               widget.recipe.name,
               style: TextStyle(fontSize: 16.0),
             ),
+
+            Text(
+              "Price: "+widget.recipe.price.toString(),
+              style: TextStyle(fontSize: 14.0),
+            )
+
           ])),
     );
   }
