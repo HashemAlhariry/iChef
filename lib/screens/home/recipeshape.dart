@@ -1,9 +1,11 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:ichef/models/recipe.dart';
+import 'package:ichef/screens/home/recipe_description.dart';
 
 class RecipeShape extends StatefulWidget {
   final Recipe recipe;
+
   RecipeShape({this.recipe});
 
   @override
@@ -37,29 +39,38 @@ class _RecipeShapeState extends State<RecipeShape> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
-      child: Column(children: <Widget>[
-        _downloadUrl == null
-            ? Container(
-                width: _sizeOfCirclarImage,
-                height: _sizeOfCirclarImage,
-              )
-            : new Container(
-                width: _sizeOfCirclarImage,
-                height: _sizeOfCirclarImage,
-                decoration: new BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: new DecorationImage(
-                        fit: BoxFit.cover,
-                        image: new NetworkImage(_downloadUrl)))),
-        Text(
-          widget.recipe.name,
-          style: TextStyle(fontSize: 16.0),
-        ),
-        Text(
-          "Price: " + widget.recipe.price.toString(),
-          style: TextStyle(fontSize: 14.0),
-        )
-      ]),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => RecipeDescription(recipe: widget.recipe)),
+          );
+        },
+        child: Column(children: <Widget>[
+          _downloadUrl == null
+              ? Container(
+                  width: _sizeOfCirclarImage,
+                  height: _sizeOfCirclarImage,
+                )
+              : Container(
+                  width: _sizeOfCirclarImage,
+                  height: _sizeOfCirclarImage,
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: new DecorationImage(
+                          fit: BoxFit.cover,
+                          image: new NetworkImage(_downloadUrl)))),
+          Text(
+            widget.recipe.name,
+            style: TextStyle(fontSize: 16.0),
+          ),
+          Text(
+            "Price: " + widget.recipe.price.toString(),
+            style: TextStyle(fontSize: 14.0),
+          )
+        ]),
+      ),
     );
   }
 }

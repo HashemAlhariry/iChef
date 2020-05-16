@@ -1,9 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:ichef/screens/home/recipeslist.dart';
+import 'package:ichef/models/recipe.dart';
 import 'package:ichef/services/auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
-class Home extends StatelessWidget {
+class RecipeDescription extends StatefulWidget {
+  final Recipe recipe;
+
+  RecipeDescription({this.recipe});
+
+  @override
+  _RecipeDescriptionState createState() => _RecipeDescriptionState();
+}
+
+class _RecipeDescriptionState extends State<RecipeDescription> {
   final AuthService _auth = AuthService();
+  String _downloadUrl;
+  double _sizeOfCirclarImage = 330.0;
+
+  @override
+  void initState() {
+    downloadImage();
+    super.initState();
+  }
+
+  Future downloadImage() async {
+    final ref = FirebaseStorage.instance.ref().child(widget.recipe.image);
+    String url = await ref.getDownloadURL();
+    if (this.mounted) {
+      setState(() {
+        _downloadUrl = url;
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +47,9 @@ class Home extends StatelessWidget {
           ),
         ),
         title: Text(
-          "iChef",
-          style: TextStyle(color: Colors.white),
+          widget.recipe.name,
+          style: TextStyle(color: Colors.white,fontSize: 16),
+
         ),
         backgroundColor: Colors.red[400],
         elevation: 0.0,
@@ -36,7 +66,7 @@ class Home extends StatelessWidget {
           )
         ],
       ),
-      drawer: Drawer(
+      drawer:  Drawer(
         child: ListView(
           children: <Widget>[
             UserAccountsDrawerHeader(
@@ -67,7 +97,7 @@ class Home extends StatelessWidget {
             Divider(),
             InkWell(
               onTap: () async {
-                await _auth.signOut();
+                //await _auth.signOut();
               },
               child: ListTile(
                   title: Text('Log out'),
@@ -82,46 +112,41 @@ class Home extends StatelessWidget {
           ],
         ),
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.all(20),
-              child: Text("Special Offers", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+      body: Center(
+          child: ListView(
+              padding: const EdgeInsets.all(10.0),
+              children: <Widget>[
+            _downloadUrl == null
+                ? Container(
+              width: _sizeOfCirclarImage,
+              height: _sizeOfCirclarImage,
+            )
+                : Container(
+               margin: EdgeInsets.all(10.0),
+                width: _sizeOfCirclarImage,
+                height: _sizeOfCirclarImage,
+                decoration: new BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: new DecorationImage(
+                        fit: BoxFit.cover,
+                        image: new NetworkImage(_downloadUrl)))),
+            SizedBox(height: 10.0,),
+            Text(
+              widget.recipe.description+" plus add any new things you want to add to help us increase the description",
+              style: TextStyle(fontSize: 18.0),
             ),
-          ),
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: 120,
-              child: ListView.builder(
-                  itemExtent: 200,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) => Container(
-                        margin: EdgeInsets.all(10.0),
-                        decoration: BoxDecoration(
-                        color: Colors.red[400],
-                          borderRadius: BorderRadius.all(Radius.circular(20))
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Offer Number ${index + 1}",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                  itemCount: 10),
+            SizedBox(height: 10.0,),
+            Text(
+              "Duration: " + widget.recipe.duration.toString(),
+              style: TextStyle(fontSize: 18.0),
             ),
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.all(20),
-              child: Text("Main Recipes", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+            SizedBox(height: 10.0,),
+            Text(
+              "Price: " + widget.recipe.price.toString() + " Pounds",
+              style: TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold),
             ),
-          ),
-          RecipesList()
-        ],
+
+          ])
       ),
     );
   }
