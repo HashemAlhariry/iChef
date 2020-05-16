@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ichef/screens/Authenticate/authenticate.dart';
-import 'package:ichef/screens/Authenticate/login.dart';
-import 'package:ichef/screens/Authenticate/signup.dart';
 import 'package:ichef/screens/wrapper.dart';
 import 'package:ichef/services/auth.dart';
 import 'package:provider/provider.dart';

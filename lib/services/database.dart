@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ichef/models/recipe.dart';
 class DatabaseService {
   final String uid;
   DatabaseService({this.uid});
