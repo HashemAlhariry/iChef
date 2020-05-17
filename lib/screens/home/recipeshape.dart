@@ -59,7 +59,7 @@ class _RecipeShapeState extends State<RecipeShape> {
                   decoration: new BoxDecoration(
                       shape: BoxShape.circle,
                       image: new DecorationImage(
-                          fit: BoxFit.cover,
+                          fit: BoxFit.fitWidth,
                           image: new NetworkImage(_downloadUrl)))),
           Text(
             widget.recipe.name,
